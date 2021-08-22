@@ -9,7 +9,8 @@ export const theme = extendTheme({
     },
     gray: {
       50: '#F6F6F7',
-      100: '#9e9ea7',
+      100: '#eeeeee',
+      200: '#9e9ea7',
       300: '#666665',
       900: '#111111',
     },
