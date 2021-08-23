@@ -1,3 +1,4 @@
+import jwtDecode from 'jwt-decode';
 import React, {
  createContext, ReactText, useCallback, useContext, useState,
 } from 'react';
@@ -9,24 +10,26 @@ interface SignInCredentials {
 }
 
 interface AuthState {
-  token: string;
+  accessToken: string;
   user: User;
 }
 
 interface AuthContextData {
   user: User;
-  token: string;
+  accessToken: string;
   signIn(credentials: SignInCredentials): Promise<void>;
   signOut(): void;
-  updateUser(user: User): void;
 }
 
 type User = {
   id: string;
   email: string;
   name: string;
-  is_staff: boolean;
 };
+
+interface DecodedToken {
+  sub: string;
+}
 
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
@@ -41,47 +44,41 @@ const useAuth = () => {
 
 const AuthProvider: React.FC = ({ children }) => {
   const [data, setData] = useState<AuthState>(() => {
-    const token = localStorage.getItem('@KDash:token');
-    const user = localStorage.getItem('@KDash:user');
-    if (token && user) {
-      return { token, user: JSON.parse(user) };
+    const accessToken = localStorage.getItem('@Doit:accessToken');
+    const user = localStorage.getItem('@Doit:user');
+    if (accessToken && user) {
+      return { accessToken, user: JSON.parse(user) };
     }
 
     return {} as AuthState;
   });
 
   const signIn = useCallback(async ({ email, password }) => {
-    const response = await api.post<AuthState>('/sessions', {
+    const response = await api.post<AuthState>('/login', {
       email,
       password,
     });
 
-    const { token, user } = response.data;
+    const { accessToken } = response.data;
 
-    localStorage.setItem('@KDash:token', token);
-    localStorage.setItem('@KDash:user', JSON.stringify(user));
+    const { sub } = jwtDecode<DecodedToken>(accessToken);
 
-    setData({ token, user });
+    const userResponse = await api.get(`/users/${sub}`, {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
+
+    localStorage.setItem('@Doit:accessToken', accessToken);
+    localStorage.setItem('@Doit:user', JSON.stringify(userResponse.data));
+
+    setData({ accessToken, user: userResponse.data });
   }, []);
 
   const signOut = useCallback(() => {
-    localStorage.removeItem('@KDash:token');
-    localStorage.removeItem('@KDash:user');
+    localStorage.removeItem('@Doit:accessToken');
+    localStorage.removeItem('@Doit:user');
 
     setData({} as AuthState);
   }, []);
-
-  const updateUser = useCallback(
-    (user: User) => {
-      localStorage.setItem('@KDash:user', JSON.stringify(user));
-
-      setData({
-        token: data.token,
-        user,
-      });
-    },
-    [setData, data.token],
-  );
 
   return (
     <AuthContext.Provider
@@ -89,8 +86,7 @@ const AuthProvider: React.FC = ({ children }) => {
         user: data.user,
         signIn,
         signOut,
-        token: data.token,
-        updateUser,
+        accessToken: data.accessToken,
       }}
     >
       {children}

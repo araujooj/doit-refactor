@@ -27,12 +27,12 @@ import SimpleIcon from '../../assets/simple-icon.svg';
 import { api } from '../../services/api';
 import { ModalSuccess } from '../../components/Modal/ModalSuccess';
 
-type SignInFormData = {
+interface SignUpFormData {
   name: string;
   email: string;
   password: string;
   confirm_password: string;
-};
+}
 
 const schema = yup.object().shape({
   name: yup.string().required('Campo obrigatório!'),
@@ -66,9 +66,9 @@ export const Signup = () => {
     onClose: onErrorModalClose,
   } = useDisclosure();
 
-  const handleSignup = (data: SubmitHandler<SignInFormData>) => {
+  const handleSignup = ({ name, email, password }: SignUpFormData) => {
     api
-      .post('/register', data)
+      .post('/register', { name, email, password })
       .then((response) => {
         setLoading(false);
         onSuccessModalOpen();
