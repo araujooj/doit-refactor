@@ -14,6 +14,7 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useState } from 'react';
 import { FaEnvelope, FaLock } from 'react-icons/fa';
+import { useHistory } from 'react-router-dom';
 import LogoSecondary from '../../assets/logo-secondary.svg';
 import { Input } from '../../components/Form/Input';
 import { useAuth } from '../../contexts/AuthContext';
@@ -48,22 +49,30 @@ export const Login = () => {
     setLoading(true);
     signIn(values)
       .then((response) => setLoading(false))
-      .catch((err) => {
+      .catch((_) => {
         setLoading(false);
         onOpen();
       });
   };
 
+  const history = useHistory();
+
   return (
     <>
-      <ModalError isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
+      <ModalError
+        isOpen={isOpen}
+        onOpen={onOpen}
+        onClose={onClose}
+        error="Seu email ou senha estão incorretos!"
+      />
       <Flex
-        align="center"
-        w="70%"
         justifyContent="space-between"
+        align="center"
+        w="100%"
         h="100vh"
         color="white"
-        bg="purple.800"
+        bgGradient="linear(to-r, purple.800 70%, white 30%)"
+        paddingX="8rem"
       >
         <Box ml="32">
           <Image w="150px" mb="4" src={LogoSecondary} />
@@ -74,18 +83,17 @@ export const Login = () => {
           </Text>
         </Box>
         <Box
+          w="500px"
           as="form"
           onSubmit={handleSubmit(handleSignIn)}
-          position="absolute"
-          right="8"
           borderRadius="4"
           boxShadow="lg"
-          w="30%"
-          h="65%"
           color="gray.800"
           bg="white"
-          mr="12%"
-          padding="1.875rem"
+          paddingY="10"
+          paddingX="8"
+          position="absolute"
+          right="12vw"
         >
           <Heading as="h3" size="lg">
             Bem vindo de volta!
@@ -122,7 +130,7 @@ export const Login = () => {
               bg="purple.800"
               color="white"
               w="100%"
-              h="50px"
+              h="60px"
               borderRadius="8px"
               _hover={{
                 background: 'purple.900',
@@ -133,11 +141,11 @@ export const Login = () => {
             </Button>
             <Text>Ainda não possui uma conta?</Text>
             <Button
-              type="submit"
+              onClick={() => history.push('/signup')}
               bg="gray.100"
               color="gray.200"
               w="100%"
-              h="50px"
+              h="60px"
               borderRadius="8px"
               _hover={{
                 background: 'gray.50',
