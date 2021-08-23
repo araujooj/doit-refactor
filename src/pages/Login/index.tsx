@@ -135,7 +135,7 @@ export const Login = () => {
               h="60px"
               borderRadius="8px"
               _hover={{
-                background: 'purple.900',
+                background: 'purple.600',
               }}
               isLoading={loading}
             >

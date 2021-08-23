@@ -172,7 +172,7 @@ export const Signup = () => {
             h="60px"
             borderRadius="8px"
             _hover={{
-              background: 'purple.900',
+              background: 'purple.600',
             }}
             isLoading={loading}
           >
@@ -190,9 +190,7 @@ export const Signup = () => {
                 <Heading size="lg"> Agilidade </Heading>
                 <Text w="350px">
                   Agilize seus projetos com rapidez e
-                  {' '}
                   <br />
-                  {' '}
                   muita performance
                 </Text>
               </Box>

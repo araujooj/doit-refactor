@@ -51,7 +51,7 @@ export const ModalSuccess = ({
           w="32px"
           h="32px"
           bg="red.500"
-          fontSize="18px"
+          fontSize="lg"
           borderRadius="md"
         >
           <FaTimes color={theme.colors.white} />
@@ -67,7 +67,7 @@ export const ModalSuccess = ({
           color="white"
           w="100%"
           onClick={onClick}
-          _hover={{ background: 'purple.700' }}
+          _hover={{ background: 'purple.600' }}
         >
           {buttonMessage}
         </Button>
