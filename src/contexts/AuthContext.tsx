@@ -38,7 +38,6 @@ const useAuth = () => {
   if (!context) {
     throw new Error('useAuth must be used within an AuthProvider');
   }
-
   return context;
 };
 
@@ -46,6 +45,7 @@ const AuthProvider: React.FC = ({ children }) => {
   const [data, setData] = useState<AuthState>(() => {
     const accessToken = localStorage.getItem('@Doit:accessToken');
     const user = localStorage.getItem('@Doit:user');
+
     if (accessToken && user) {
       return { accessToken, user: JSON.parse(user) };
     }
