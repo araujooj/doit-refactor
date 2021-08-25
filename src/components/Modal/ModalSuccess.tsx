@@ -17,7 +17,6 @@ import { theme } from '../../styles/theme';
 
 interface ModalSuccessProps {
   isOpen: boolean;
-  onOpen: () => void;
   onClose: () => void;
   message: string;
   buttonMessage: string;
@@ -27,7 +26,6 @@ interface ModalSuccessProps {
 
 export const ModalSuccess = ({
   isOpen,
-  onOpen,
   onClose,
   message,
   buttonMessage,

@@ -61,12 +61,7 @@ export const Login = () => {
 
   return (
     <>
-      <ModalError
-        isOpen={isOpen}
-        onOpen={onOpen}
-        onClose={onClose}
-        error="Seu email ou senha estão incorretos!"
-      />
+      <ModalError isOpen={isOpen} onClose={onClose} error="Seu email ou senha estão incorretos!" />
       <Flex
         justifyContent="space-between"
         align="center"

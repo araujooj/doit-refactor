@@ -82,13 +82,11 @@ export const Signup = () => {
     <>
       <ModalError
         isOpen={isErrorModalOpen}
-        onOpen={onErrorModalOpen}
         onClose={onErrorModalClose}
         error="Seu email já está em uso"
       />
       <ModalSuccess
         isOpen={isSuccessModalOpen}
-        onOpen={onSuccessModalOpen}
         onClose={onSuccessModalClose}
         onClick={() => history.push('/')}
         message="Seu cadastro deu super certo, vamos lá!"

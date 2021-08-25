@@ -15,14 +15,11 @@ import { theme } from '../../styles/theme';
 
 interface ModalErrorProps {
   isOpen: boolean;
-  onOpen: () => void;
   onClose: () => void;
   error: string;
 }
 
-export const ModalError = ({
- isOpen, onOpen, onClose, error,
-}: ModalErrorProps) => (
+export const ModalError = ({ isOpen, onClose, error }: ModalErrorProps) => (
   <Modal isOpen={isOpen} onClose={onClose}>
     <ModalOverlay />
     <ModalContent bg="white" color="gray.800">

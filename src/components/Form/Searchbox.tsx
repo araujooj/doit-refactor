@@ -1,25 +1,42 @@
 import {
  Box, Button, Center, Flex, useDisclosure,
 } from '@chakra-ui/react';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useForm } from 'react-hook-form';
 import { FaSearch } from 'react-icons/fa';
+import * as yup from 'yup';
+import { useAuth } from '../../contexts/AuthContext';
+import { useTasks } from '../../contexts/TaskContext';
 import { theme } from '../../styles/theme';
 import { ModalCreateTask } from '../Modal/ModalCreateTask';
 import { Input } from './Input';
 
+interface SearchData {
+  title: string;
+}
+
 export const SearchBox = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const { searchTasks } = useTasks();
+  const { accessToken } = useAuth();
+
+  const { register, handleSubmit } = useForm();
+
+  const handleSearch = ({ title }: SearchData) => searchTasks(title, accessToken);
+
   return (
     <>
-      <ModalCreateTask isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
+      <ModalCreateTask isOpen={isOpen} onClose={onClose} />
       <Flex mt="6" w="100%" paddingX="8" paddingY="2">
-        <Flex>
+        <Flex as="form" onSubmit={handleSubmit(handleSearch)}>
           <Input
             placeholder="Pesquisar por tarefa"
-            name="search"
             _focus={{
               backgroundColor: 'gray.100',
             }}
             w="35vw"
+            {...register('title')}
           />
           <Center
             as="button"

@@ -27,10 +27,10 @@ import { useTasks } from '../../contexts/TaskContext';
 import { api } from '../../services/api';
 import { theme } from '../../styles/theme';
 import { Input } from '../Form/Input';
+import { TextArea } from '../Form/TextArea';
 
 interface ModalErrorProps {
   isOpen: boolean;
-  onOpen: () => void;
   onClose: () => void;
 }
 
@@ -44,7 +44,7 @@ const schema = yup.object().shape({
   description: yup.string().required('Campo obrigatório!'),
 });
 
-export const ModalCreateTask = ({ isOpen, onOpen, onClose }: ModalErrorProps) => {
+export const ModalCreateTask = ({ isOpen, onClose }: ModalErrorProps) => {
   const [loading, setLoading] = useState(false);
 
   const { accessToken, user } = useAuth();
@@ -118,7 +118,7 @@ export const ModalCreateTask = ({ isOpen, onOpen, onClose }: ModalErrorProps) =>
               )}
             </Box>
             <Box w="100%">
-              <Input
+              <TextArea
                 placeholder="Digite sua descrição"
                 label="Descrição"
                 error={errors.description}

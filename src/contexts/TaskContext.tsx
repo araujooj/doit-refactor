@@ -21,6 +21,7 @@ interface TasksContextData {
   tasks: Task[];
   createTask: (data: Omit<Task, 'id'>, accessToken: string) => Promise<void>;
   loadTasks: (id: string, accessToken: string) => Promise<void>;
+  searchTasks: (taskTitle: string, accessToken: string) => Promise<void>;
   updateTask: (taskId: string, accessToken: string, userId: string) => Promise<void>;
   deleteTask: (taskId: string, accessToken: string) => Promise<void>;
 }
@@ -40,13 +41,17 @@ const TaskProvider: React.FC = ({ children }) => {
   const [tasks, setTasks] = useState<Task[]>([]);
 
   async function loadTasks(id: string, accessToken: string) {
-    const response = await api.get<Task[]>(`/tasks?userId=${id}`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
+    try {
+      const response = await api.get<Task[]>(`/tasks?userId=${id}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
 
-    setTasks(response.data);
+      setTasks(response.data);
+    } catch (err) {
+      setTasks([]);
+    }
   }
 
   const createTask = useCallback(async (data: Omit<Task, 'id'>, accessToken: string) => {
@@ -103,6 +108,16 @@ const TaskProvider: React.FC = ({ children }) => {
     [tasks],
   );
 
+  const searchTasks = useCallback(async (taskTitle: string, accessToken: string) => {
+    const response = await api.get<Task[]>(`/tasks?title_like=${taskTitle}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    setTasks(response.data);
+  }, []);
+
   return (
     <TaskContext.Provider
       value={{
@@ -111,6 +126,7 @@ const TaskProvider: React.FC = ({ children }) => {
         loadTasks,
         updateTask,
         deleteTask,
+        searchTasks,
       }}
     >
       {children}
