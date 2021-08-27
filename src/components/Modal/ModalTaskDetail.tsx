@@ -10,11 +10,12 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Progress,
+  Text,
 } from '@chakra-ui/react';
 import {
  FaCheck, FaCube, FaTimes, FaTrash, FaUser,
 } from 'react-icons/fa';
-import * as yup from 'yup';
 import { useAuth } from '../../contexts/AuthContext';
 import { useTasks } from '../../contexts/TaskContext';
 import { theme } from '../../styles/theme';
@@ -36,17 +37,24 @@ export const ModalTaskDetail = ({ isOpen, onClose, task }: ModalErrorProps) => {
   const { updateTask, deleteTask } = useTasks();
   const { accessToken, user } = useAuth();
 
+  const handleDeleteTask = () => {
+    deleteTask(task.id, accessToken);
+    onClose();
+  };
+
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent bg="white" color="gray.800">
-        <ModalHeader display="flex">
-          <Center w="32px" h="32px" bg="purple.500" fontSize="18px" borderRadius="md">
-            <FaCube color={theme.colors.white} />
-          </Center>
-          <Heading mt="1" ml="2" as="h2" size="md">
-            Visualizar
-          </Heading>
+        <ModalHeader display="flex" justifyContent="space-between">
+          <HStack>
+            <Center w="32px" h="32px" bg="purple.500" fontSize="18px" borderRadius="md">
+              <FaCube color={theme.colors.white} />
+            </Center>
+            <Heading mt="1" ml="2" as="h2" size="md">
+              Visualizar
+            </Heading>
+          </HStack>
           <HStack spacing="2">
             <Center
               as="button"
@@ -55,7 +63,7 @@ export const ModalTaskDetail = ({ isOpen, onClose, task }: ModalErrorProps) => {
               borderWidth="1px"
               borderRadius="5px"
               borderColor="gray.200"
-              onClick={() => deleteTask(task.id, accessToken)}
+              onClick={handleDeleteTask}
             >
               <FaTrash color={theme.colors.gray[200]} />
             </Center>
@@ -87,9 +95,25 @@ export const ModalTaskDetail = ({ isOpen, onClose, task }: ModalErrorProps) => {
         </ModalHeader>
 
         <ModalBody as="form">
-          <Heading as="h1">Estudo de NextJS: GetStaticProps vs GetServerSideProps</Heading>
+          <Heading as="h1" fontSize="2xl">
+            {task.title}
+          </Heading>
+          <Box
+            maxH="240px"
+            color="transparent"
+            bgGradient="linear(to-b, gray.800, transparent)"
+            backgroundClip="text"
+            overflow="scroll"
+          >
+            <Text whiteSpace="pre-line">{task.description}</Text>
+          </Box>
         </ModalBody>
-        <ModalFooter />
+        <Box padding="6">
+          <Progress colorScheme="purple" value={task.completed ? 100 : 10} bgColor="gray.100" />
+          <Text color="gray.200" mt="3">
+            07 march 2021
+          </Text>
+        </Box>
       </ModalContent>
     </Modal>
   );

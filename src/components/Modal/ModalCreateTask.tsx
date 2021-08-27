@@ -16,7 +16,7 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import {
  FaClipboard, FaExclamation, FaTimes, FaUser,
@@ -60,6 +60,8 @@ export const ModalCreateTask = ({ isOpen, onClose }: ModalErrorProps) => {
     resolver: yupResolver(schema),
   });
 
+  useEffect(() => () => onClose(), [onClose]);
+
   const handleCreateTask = async (data: TaskData) => {
     const newData = { ...data, userId: user.id, completed: false };
     setLoading(true);
@@ -74,6 +76,8 @@ export const ModalCreateTask = ({ isOpen, onClose }: ModalErrorProps) => {
         isClosable: true,
       });
     });
+
+    onClose();
   };
 
   return (

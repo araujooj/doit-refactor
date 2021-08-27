@@ -45,7 +45,7 @@ export const Login = () => {
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const handleSignIn: SubmitHandler<SignInFormData> = async (values) => {
+  const handleSignIn = async (values: SignInFormData) => {
     setLoading(true);
     signIn(values)
       .then((response) => {

@@ -1,13 +1,5 @@
 import {
-  Box,
-  Center,
-  Flex,
-  Heading,
-  HStack,
-  Progress,
-  Text,
-  BoxProps,
-  ScaleFade,
+ Box, Center, Flex, Heading, HStack, Progress, Text, BoxProps,
 } from '@chakra-ui/react';
 import { FaCheck, FaTrash } from 'react-icons/fa';
 import { useAuth } from '../../contexts/AuthContext';
@@ -41,9 +33,7 @@ export const Card = ({ task, onClick, ...rest }: CardProps) => {
       borderWidth="1px"
       borderColor="gray.50"
       boxShadow="lg"
-      minW="420px"
       padding="7"
-      onClick={onClick}
       {...rest}
     >
       <Flex justify="space-between">
@@ -76,7 +66,7 @@ export const Card = ({ task, onClick, ...rest }: CardProps) => {
           </Center>
         </HStack>
       </Flex>
-      <Box w="100%" mt="4">
+      <Box w="100%" mt="4" onClick={onClick}>
         <Text noOfLines={3}>{task.description}</Text>
         <Progress
           colorScheme="purple"
