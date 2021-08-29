@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   Flex,
+  Grid,
   Heading,
   Image,
   Text,
@@ -63,95 +64,110 @@ export const Login = () => {
     <>
       <ModalError isOpen={isOpen} onClose={onClose} error="Seu email ou senha estão incorretos!" />
       <Flex
-        justifyContent="space-between"
-        align="center"
-        w="100%"
-        h="100vh"
+        height={['auto', 'auto', '100vh', '100vh']}
+        justifyContent="center"
+        background="purple.800"
+        bgGradient={[
+          'linear(to-b, purple.800 65%, white 35%)',
+          'linear(to-b, purple.800 65%, white 35%)',
+          'linear(to-r, purple.800 65%, white 35%)',
+          'linear(to-r, purple.800 65%, white 35%)',
+        ]}
+        alignItems="center"
+        padding={['10px 15px', '10px 15px', '0px', '0px']}
         color="white"
-        bgGradient="linear(to-r, purple.800 70%, white 30%)"
-        paddingX="8rem"
       >
-        <Box ml="32">
-          <Image w="150px" mb="4" src={LogoSecondary} />
-          <Heading as="h1">O jeito fácil, grátis</Heading>
-          <Text>
-            Flexível e atrativo de gerenciar
-            <Text fontWeight="bold"> seus projetos em uma única plataforma</Text>
-          </Text>
-        </Box>
-        <Box
-          w="500px"
-          as="form"
-          onSubmit={handleSubmit(handleSignIn)}
-          borderRadius="4"
-          boxShadow="lg"
-          color="gray.800"
-          bg="white"
-          paddingY="10"
-          paddingX="8"
-          position="absolute"
-          right="12vw"
+        <Flex
+          w={['100%', '100%', '90%', '70%']}
+          justifyContent="center"
+          flexDirection={['column', 'column', 'row', 'row']}
+          alignItems="center"
         >
-          <Heading as="h3" size="lg">
-            Bem vindo de volta!
-          </Heading>
-
-          <VStack mt="4" spacing={5}>
-            <Box w="100%">
-              <Input
-                placeholder="Digite seu login"
-                type="email"
-                label="Login"
-                error={errors.email}
-                icon={FaEnvelope}
-                {...register('email')}
-              />
-
-              {!errors.email && (
-                <Text ml="1" mt="1" color="gray.300">
-                  Exemplo: nome@email.com
-                </Text>
-              )}
-            </Box>
-
-            <Input
-              type="password"
-              placeholder="Digite sua senha"
-              label="Senha"
-              error={errors.password}
-              icon={FaLock}
-              {...register('password')}
+          <Grid w={['100%', '100%', '50%', '50%']} paddingRight="100px">
+            <Image
+              src={LogoSecondary}
+              alt="Do it"
+              title="Do it"
+              boxSize={['120px', '120px', '150px', '150px']}
             />
-            <Button
-              type="submit"
-              bg="purple.800"
-              color="white"
-              w="100%"
-              h="60px"
-              borderRadius="8px"
-              _hover={{
-                background: 'purple.600',
-              }}
-              isLoading={loading}
-            >
-              Entrar
-            </Button>
-            <Text>Ainda não possui uma conta?</Text>
-            <Button
-              onClick={() => history.push('/signup')}
-              bg="gray.100"
-              color="gray.200"
-              w="100%"
-              h="60px"
-              borderRadius="8px"
-              _hover={{
-                background: 'gray.50',
-              }}
-            >
-              Criar conta
-            </Button>
-          </VStack>
-        </Box>
+            <Heading as="h1">O jeito fácil, grátis</Heading>
+            <Text>
+              Flexível e atrativo de gerenciar
+              <Text fontWeight="bold"> seus projetos em uma única plataforma</Text>
+            </Text>
+          </Grid>
+          <Grid
+            mt={['4', '4', '0']}
+            width={['100%', '100%', '40%', '40%']}
+            padding="30px 15px"
+            border="3px solid"
+            borderColor="gray.100"
+            as="form"
+            bg="white"
+            color="gray.800"
+            onSubmit={handleSubmit(handleSignIn)}
+          >
+            <Heading as="h3" size="lg">
+              Bem vindo de volta!
+            </Heading>
+
+            <VStack mt="4" spacing={5}>
+              <Box w="100%">
+                <Input
+                  placeholder="Digite seu login"
+                  type="email"
+                  label="Login"
+                  error={errors.email}
+                  icon={FaEnvelope}
+                  {...register('email')}
+                />
+
+                {!errors.email && (
+                  <Text ml="1" mt="1" color="gray.300">
+                    Exemplo: nome@email.com
+                  </Text>
+                )}
+              </Box>
+
+              <Input
+                type="password"
+                placeholder="Digite sua senha"
+                label="Senha"
+                error={errors.password}
+                icon={FaLock}
+                {...register('password')}
+              />
+              <Button
+                type="submit"
+                bg="purple.500"
+                color="white"
+                w="100%"
+                h="60px"
+                borderRadius="8px"
+                _hover={{
+                  background: 'purple.600',
+                }}
+                isLoading={loading}
+              >
+                Entrar
+              </Button>
+              <Text>Ainda não possui uma conta?</Text>
+              <Button
+                onClick={() => history.push('/signup')}
+                bg="gray.100"
+                color="gray.300"
+                w="100%"
+                h="60px"
+                borderRadius="8px"
+                _hover={{
+                  background: 'gray.200',
+                }}
+              >
+                Criar conta
+              </Button>
+            </VStack>
+          </Grid>
+        </Flex>
       </Flex>
     </>
   );

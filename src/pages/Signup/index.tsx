@@ -3,10 +3,12 @@ import {
   Button,
   Center,
   Flex,
+  Grid,
   Heading,
   Image,
   Text,
   toast,
+  useBreakpointValue,
   useDisclosure,
   VStack,
 } from '@chakra-ui/react';
@@ -15,7 +17,7 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useState } from 'react';
 import {
- FaEnvelope, FaForward, FaLock, FaUser,
+ FaArrowLeft, FaEnvelope, FaForward, FaLock, FaUser,
 } from 'react-icons/fa';
 import { useHistory } from 'react-router-dom';
 import LogoSecondary from '../../assets/logo-secondary.svg';
@@ -23,9 +25,11 @@ import { Input } from '../../components/Form/Input';
 import { useAuth } from '../../contexts/AuthContext';
 import { ModalError } from '../../components/Modal/ModalError';
 import { theme } from '../../styles/theme';
-import SimpleIcon from '../../assets/simple-icon.svg';
 import { api } from '../../services/api';
 import { ModalSuccess } from '../../components/Modal/ModalSuccess';
+import { SignupInfo } from './SignupInfo';
+import { SignupForm } from './SignupForm';
+import { GoBackButton } from './GoBackButton';
 
 interface SignUpFormData {
   name: string;
@@ -78,6 +82,11 @@ export const Signup = () => {
 
   const history = useHistory();
 
+  const isWideVersion = useBreakpointValue({
+    base: false,
+    md: true,
+  });
+
   return (
     <>
       <ModalError
@@ -94,123 +103,70 @@ export const Signup = () => {
         secondaryText="Você já pode começar criando <b> suas listas </b> agora mesmo... "
       />
 
-      <Flex
-        w="100%"
-        h="100vh"
-        color="white"
-        bgGradient="linear(to-l, purple.800 70%, white 30%)"
-        paddingX="10rem"
-      >
-        <Box
-          w="500px"
-          as="form"
-          onSubmit={handleSubmit(handleSignup)}
-          borderRadius="4"
-          boxShadow="lg"
-          color="gray.800"
-          bg="white"
-          paddingY="10"
-          paddingX="8"
-          position="absolute"
-          left="12vw"
-          mt="12"
+      {isWideVersion ? (
+        <Flex
+          height={['auto', 'auto', '100vh', '100vh']}
+          justifyContent="center"
+          background="purple.800"
+          bgGradient={[
+            'linear(to-b, purple.800 65%, white 35%)',
+            'linear(to-b, purple.800 65%, white 35%)',
+            'linear(to-r, white 30%, purple.800 30%)',
+            'linear(to-r, white 30%, purple.800 30%)',
+          ]}
+          alignItems="center"
+          padding={['10px 15px', '10px 15px', '0px', '0px']}
+          color="white"
         >
-          <Heading as="h3" size="lg">
-            Crie sua conta
-          </Heading>
+          <GoBackButton history={history} top="90" left="25" />
 
-          <VStack mt="4" spacing={5}>
-            <Input
-              placeholder="Digite seu nome"
-              label="Nome"
-              error={errors.name}
-              icon={FaUser}
-              {...register('name')}
-            />
-            <Box w="100%">
-              <Input
-                placeholder="Digite seu email"
-                type="email"
-                label="Email"
-                error={errors.email}
-                icon={FaEnvelope}
-                {...register('email')}
-              />
-
-              {!errors.email && (
-                <Text ml="1" mt="1" color="gray.300">
-                  Exemplo: nome@email.com
-                </Text>
-              )}
-            </Box>
-
-            <Input
-              type="password"
-              placeholder="Digite sua senha"
-              label="Senha"
-              error={errors.password}
-              icon={FaLock}
-              {...register('password')}
-            />
-            <Input
-              type="password"
-              placeholder="Confirme sua senha"
-              label="Confirmação de senha"
-              error={errors.confirm_password}
-              icon={FaLock}
-              {...register('confirm_password')}
-            />
-          </VStack>
-          <Button
-            mt="6"
-            type="submit"
-            bg="purple.800"
-            color="white"
-            w="100%"
-            h="60px"
-            borderRadius="8px"
-            _hover={{
-              background: 'purple.600',
-            }}
-            isLoading={loading}
+          <Flex
+            w={['100%', '100%', '90%', '70%']}
+            justifyContent="center"
+            flexDirection={['column', 'column', 'row', 'row']}
+            alignItems="center"
           >
-            Finalizar cadastro
-          </Button>
-        </Box>
-        <Box mt="16" ml="65%">
-          <Image w="150px" mb="16" src={LogoSecondary} />
-          <VStack spacing="14">
-            <Flex>
-              <Center borderRadius="5px" bg="white" w="40px" h="40px">
-                <FaForward color={theme.colors.purple['800']} size={25} />
-              </Center>
-              <Box ml="4">
-                <Heading size="lg"> Agilidade </Heading>
-                <Text w="350px">
-                  Agilize seus projetos com rapidez e
-                  <br />
-                  muita performance
-                </Text>
-              </Box>
-            </Flex>
-            <Flex>
-              <Center borderRadius="5px" bg="white" w="40px" h="40px">
-                <Image src={SimpleIcon} w="25px" />
-              </Center>
-              <Box ml="4">
-                <Heading size="lg"> Simplicidade </Heading>
-                <Text w="350px">
-                  Armazene seus projetos em uma
-                  {' '}
-                  <br />
-                  {' '}
-                  interface altamente usual
-                </Text>
-              </Box>
-            </Flex>
-          </VStack>
-        </Box>
-      </Flex>
+            <SignupForm
+              loading={loading}
+              errors={errors}
+              handleSignup={handleSubmit(handleSignup)}
+              register={register}
+            />
+            <SignupInfo />
+          </Flex>
+        </Flex>
+      ) : (
+        <Flex
+          height={['auto', 'auto', '100vh', '100vh']}
+          justifyContent="center"
+          background="purple.800"
+          bgGradient={[
+            'linear(to-b, purple.800 65%, white 35%)',
+            'linear(to-b, purple.800 65%, white 35%)',
+            'linear(to-r, white 30%, purple.800 30%)',
+            'linear(to-r, white 30%, purple.800 30%)',
+          ]}
+          alignItems="center"
+          padding={['10px 15px', '10px 15px', '0px', '0px']}
+          color="white"
+        >
+          <GoBackButton history={history} top="10" left="75vw" />
+          <Flex
+            w={['100%', '100%', '90%', '70%']}
+            justifyContent="center"
+            flexDirection={['column', 'column', 'row', 'row']}
+            alignItems="center"
+          >
+            <SignupInfo />
+            <SignupForm
+              loading={loading}
+              errors={errors}
+              handleSignup={handleSubmit(handleSignup)}
+              register={register}
+            />
+          </Flex>
+        </Flex>
+      )}
     </>
   );
 };

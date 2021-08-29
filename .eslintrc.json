@@ -1,7 +1,8 @@
 {
     "env": {
         "browser": true,
-        "es2021": true
+        "es2021": true,
+        "jest": true
     },
     "extends": [
         "plugin:react/recommended",
@@ -46,6 +47,7 @@
         "camelcase": "off",
         "no-case-declarations": "off",
         "jsx-a11y/anchor-is-valid": "off",
-        "react/require-default-props": "off"
+        "react/require-default-props": "off",
+        "no-console": "off"
     }
 }

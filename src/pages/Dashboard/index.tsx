@@ -54,35 +54,17 @@ export const Dashboard = () => {
     <>
       <ModalTaskDetail task={actualTask} onClose={onDetailClose} isOpen={isDetailOpen} />
 
-      {tasks.length > 0 ? (
-        <Box>
-          <Header />
-
-          <SearchBox />
-          <Grid
-            w="100%"
-            templateColumns="repeat(auto-fill, minmax(420px, 1fr))"
-            gap={10}
-            paddingX={['4', '6', '8']}
-            mt="8"
-          >
-            {tasks.map((task) => (
-              <Card onClick={() => handleClick(task)} task={task} key={task.id} />
-            ))}
-          </Grid>
-        </Box>
-      ) : (
+      {tasks.length === 0 && !loading ? (
         <>
           <ModalCreateTask isOpen={isCreateopen} onClose={onCreateClose} />
           <Header />
           <Box
             mt="4"
             w="90vw"
-            padding="8"
+            paddingY="16"
             ml="5vw"
             justifyContent="center"
             textAlign="center"
-            h={['60vh', '40vh']}
             borderWidth="2px"
             borderColor="gray.200"
             borderStyle="dashed"
@@ -105,13 +87,34 @@ export const Dashboard = () => {
               mt="6"
               bgColor="purple.800"
               color="white"
-              _hover={{ bg: 'purple.600' }}
+              _hover={{ bg: 'purple.900' }}
               onClick={onCreateOpen}
             >
               Criar sua primeira tarefa
             </Button>
           </Box>
         </>
+      ) : (
+        <Box>
+          <Header />
+
+          <SearchBox />
+          <Grid
+            w="100%"
+            templateColumns="repeat(auto-fill, minmax(420px, 1fr))"
+            gap={10}
+            paddingX={['6', '6', '8']}
+            mt="8"
+          >
+            {loading ? (
+              <CardSkeleton repeatCount={6} />
+            ) : (
+              tasks.map((task) => (
+                <Card onClick={() => handleClick(task)} task={task} key={task.id} />
+              ))
+            )}
+          </Grid>
+        </Box>
       )}
     </>
   );

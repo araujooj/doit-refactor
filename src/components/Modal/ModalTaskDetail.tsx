@@ -98,13 +98,7 @@ export const ModalTaskDetail = ({ isOpen, onClose, task }: ModalErrorProps) => {
           <Heading as="h1" fontSize="2xl">
             {task.title}
           </Heading>
-          <Box
-            maxH="240px"
-            color="transparent"
-            bgGradient="linear(to-b, gray.800, transparent)"
-            backgroundClip="text"
-            overflow="scroll"
-          >
+          <Box mt="4" maxH="240px" overflow="scroll">
             <Text whiteSpace="pre-line">{task.description}</Text>
           </Box>
         </ModalBody>
