@@ -10,40 +10,36 @@ interface DecodedToken {
 
 const apiMock = new MockAdapter(api);
 
-jest.mock('jwt-decode', () => () => ({
-  jwtDecode: (token: string) => ({
-      sub: '1',
-    } as DecodedToken),
-}));
-
 describe('Auth hook', () => {
   it('should be able to sign in', async () => {
-    const loginResponse = {
+    const apiResponse = {
+      user: {
+        id: 1,
+        name: 'John Doe',
+        email: 'johndoe@example.com',
+      },
       accessToken: 'jwt-token',
     };
 
-    apiMock.onPost('login').reply(200, loginResponse);
+    apiMock.onPost('login').reply(200, apiResponse);
 
-    const getUserResponse = {
-      id: '1',
-      name: 'John Doe',
-      email: 'johndoe@example.com',
-    };
+    const setItemSpy = jest.spyOn(Storage.prototype, 'setItem');
 
-    apiMock.onGet('users').reply(200, getUserResponse);
-
-    const { result } = renderHook(() => useAuth(), {
+    const { result, waitForNextUpdate } = renderHook(() => useAuth(), {
       wrapper: AuthProvider,
     });
 
-    const apiResult = await result.current.signIn({
+    result.current.signIn({
       email: 'johndoe@example.com',
       password: '123456',
     });
 
-    console.log(apiResult);
+    await waitForNextUpdate();
 
-    expect(result.current.accessToken).toEqual('jwt-token');
+    expect(setItemSpy).toHaveBeenCalledWith('@Doit:accessToken', apiResponse.accessToken);
+    expect(setItemSpy).toHaveBeenCalledWith('@Doit:user', JSON.stringify(apiResponse.user));
+
+    expect(result.current.user.email).toEqual('johndoe@example.com');
   });
 
   it('should restore saved data from storage when auth inits', () => {

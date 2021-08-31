@@ -1,6 +1,10 @@
 import jwtDecode from 'jwt-decode';
 import React, {
- createContext, ReactText, useCallback, useContext, useState,
+  createContext,
+  ReactText,
+  useCallback,
+  useContext,
+  useState,
 } from 'react';
 import { api } from '../services/api';
 
@@ -59,18 +63,12 @@ const AuthProvider: React.FC = ({ children }) => {
       password,
     });
 
-    const { accessToken } = response.data;
-
-    const { sub } = jwtDecode<DecodedToken>(accessToken);
-
-    const userResponse = await api.get(`/users/${sub}`, {
-      headers: { Authorization: `Bearer ${accessToken}` },
-    });
+    const { accessToken, user } = response.data;
 
     localStorage.setItem('@Doit:accessToken', accessToken);
-    localStorage.setItem('@Doit:user', JSON.stringify(userResponse.data));
+    localStorage.setItem('@Doit:user', JSON.stringify(user));
 
-    setData({ accessToken, user: userResponse.data });
+    setData({ accessToken, user });
   }, []);
 
   const signOut = useCallback(() => {
