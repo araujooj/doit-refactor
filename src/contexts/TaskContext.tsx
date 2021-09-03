@@ -19,11 +19,13 @@ interface Task {
 
 interface TasksContextData {
   tasks: Task[];
+  notFound: boolean;
   createTask: (data: Omit<Task, 'id'>, accessToken: string) => Promise<void>;
   loadTasks: (id: string, accessToken: string) => Promise<void>;
   searchTasks: (taskTitle: string, accessToken: string) => Promise<void>;
   updateTask: (taskId: string, accessToken: string, userId: string) => Promise<void>;
   deleteTask: (taskId: string, accessToken: string) => Promise<void>;
+  taskNotFound: string;
 }
 
 const TaskContext = createContext<TasksContextData>({} as TasksContextData);
@@ -39,6 +41,8 @@ const useTasks = () => {
 
 const TaskProvider: React.FC = ({ children }) => {
   const [tasks, setTasks] = useState<Task[]>([]);
+  const [notFound, setNotFound] = useState(false);
+  const [taskNotFound, setTaskNotFound] = useState('');
 
   async function loadTasks(id: string, accessToken: string) {
     try {
@@ -115,6 +119,12 @@ const TaskProvider: React.FC = ({ children }) => {
       },
     });
 
+    if (!response.data.length) {
+      setTaskNotFound(taskTitle);
+      return setNotFound(true);
+    }
+
+    setNotFound(false);
     setTasks(response.data);
   }, []);
 
@@ -127,6 +137,8 @@ const TaskProvider: React.FC = ({ children }) => {
         updateTask,
         deleteTask,
         searchTasks,
+        notFound,
+        taskNotFound,
       }}
     >
       {children}

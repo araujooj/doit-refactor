@@ -2,15 +2,12 @@ import {
   Box,
   Button,
   Center,
-  Flex,
   Grid,
   Heading,
-  Skeleton,
   Text,
-  theme,
-  useBreakpointValue,
   useDisclosure,
-  useStyleConfig,
+  Skeleton,
+  Stack,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { FaClipboard } from 'react-icons/fa';
@@ -34,7 +31,9 @@ export const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const [actualTask, setActualTask] = useState({} as Task);
 
-  const { tasks, loadTasks } = useTasks();
+  const {
+ tasks, loadTasks, notFound, taskNotFound,
+} = useTasks();
 
   const { user, accessToken } = useAuth();
 
@@ -49,6 +48,34 @@ export const Dashboard = () => {
     setActualTask(task);
     onDetailOpen();
   };
+
+  if (notFound) {
+    return (
+      <>
+        <ModalTaskDetail task={actualTask} onClose={onDetailClose} isOpen={isDetailOpen} />
+        <Header />
+
+        <SearchBox />
+
+        <Center mt="4" textAlign="center" display="flex" flexDir="column">
+          <Heading size="lg"> Não encontramos resultados para:</Heading>
+          <Text fontSize="xl" color="gray.300" fontWeight="bold">
+            {taskNotFound}
+          </Text>
+          <Box mt="6" w={['80%', '40%']} padding="6" boxShadow="lg" bg="white">
+            <Stack maxW="80%">
+              <Skeleton startColor="gray.100" endColor="gray.200" height="20px" />
+              <Skeleton startColor="gray.100" endColor="gray.200" height="20px" w="75%" />
+            </Stack>
+            <Stack mt="8">
+              <Skeleton startColor="gray.100" endColor="gray.200" height="20px" />
+              <Skeleton startColor="gray.100" endColor="gray.200" height="20px" />
+            </Stack>
+          </Box>
+        </Center>
+      </>
+    );
+  }
 
   return (
     <>

@@ -4,10 +4,6 @@ import MockAdapter from 'axios-mock-adapter';
 import { api } from '../../services/api';
 import { useAuth, AuthProvider } from '../../contexts/AuthContext';
 
-interface DecodedToken {
-  sub: string;
-}
-
 const apiMock = new MockAdapter(api);
 
 describe('Auth hook', () => {
